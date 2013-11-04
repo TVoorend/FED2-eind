@@ -1,17 +1,14 @@
-// POST FABION TIP var e = document.getElementById("ddlViewBy");
-// var strUser = e.options[e.selectedIndex].value;
-// http://stackoverflow.com/questions/1085801/how-to-get-the-selected-value-of-dropdownlist-using-javascript
-
-// Maak namespace aan zodat je geen conflicten krijgt met andere libraries
+// Maak namespace aan, geen conflicten met andere bestanden/lib
 var SCOREAPP = SCOREAPP || {};
 
 
 // Self-invoking anonymous function
 (function () {
-	// Local scope == function scope == lexical scope
-	// Zorgt ervoor dat je script in EMASCRIPT 5 draait
-	"use strict";
+    // Local scope == function scope == lexical scope
+    // Zorgt ervoor dat je script in EMASCRIPT 5 draait
+    "use strict";
 
+    // options for spinner
     var options = {
         lines: 13, // The number of lines to draw
         length: 15, // The length of each line
@@ -31,36 +28,39 @@ var SCOREAPP = SCOREAPP || {};
         left: 'auto' // Left position relative to parent in px
     };
 
+    //creat spinner with option above)
     var spinner = new Spinner(options);
+
+    // ease way to select spinner form the dom
     var target = document.getElementById('spinner');
 
+    // creat start spinning function
     spinner.startSpinning = function () {
         spinner.spin(target);
     },
 
-	// SETTINGS
-	SCOREAPP.settings = {
-	//	scheduleURL:
-		gameURL: 'https://api.leaguevine.com/v1/games',
-		rankingURL: 'https://api.leaguevine.com/v1/pools/?tournament_id=19389&order_by=%5Bname%5D'
+    // SETTINGS
+    SCOREAPP.settings = {
+    //  scheduleURL:
+        gameURL: 'https://api.leaguevine.com/v1/games',
+        rankingURL: 'https://api.leaguevine.com/v1/pools/?tournament_id=19389&order_by=%5Bname%5D'
+    },
 
-	},
+    // Controller Init
+    SCOREAPP.controller = {
 
-	// Controller Init
-	SCOREAPP.controller = {
+        // Initialize; Dit is het eerste wat je wilt uitvoeren
+        init: function () {
+            console.log("1. CONTROLLER");
+            // Initialize router
+            SCOREAPP.router.init();
+            SCOREAPP.touch.init();
+        }
+    },
 
-		// Initialize; Dit is het eerste wat je wilt uitvoeren
-		init: function () {
-			console.log("1. CONTROLLER");
-			// Initialize router
-			SCOREAPP.router.init();
-			SCOREAPP.touch.init();
-		}
-	},
-
-	// Router
-	// Routie plugin helpt bij het navigeren tussen verschillende "pagina's" op één pagina
-	SCOREAPP.router = {
+    // Router
+    // Routie plugin helpt bij het navigeren tussen verschillende "pagina's" op één pagina
+    SCOREAPP.router = {
 
         init: function () {
             console.log("2. ROUTER"),
@@ -88,12 +88,12 @@ var SCOREAPP = SCOREAPP || {};
         });
     },
 
-		// Zorg ervoor dat de pagina's wisselen.
-		// Change de sectie die is aangegeven.
-		change: function (page) {
-			console.log("router.change ");
+        // Zorg ervoor dat de pagina's wisselen.
+        // Change de sectie die is aangegeven.
+        change: function (page) {
+            console.log("router.change ");
 
-			// Var route = Pagina naam
+            // Var route = Pagina naam
             var route = page;
             // Zoek alle secties
             var sections = qwery('section[data-route]');
@@ -138,32 +138,32 @@ var SCOREAPP = SCOREAPP || {};
 
 SCOREAPP.touch = {
 
-	init: function () {
-	var swipeleft = Hammer(container).on("swipeleft", function() {
-		SCOREAPP.page.ranking();
-		history.pushState(null, null, '#ranking');
-	});
+    init: function () {
+    var swipeleft = Hammer(container).on("swipeleft", function() {
+        SCOREAPP.page.ranking();
+        history.pushState(null, null, '#ranking');
+    });
 
-	var swiperight = Hammer(container).on("swiperight", function() {
-		SCOREAPP.page.schedule();
+    var swiperight = Hammer(container).on("swiperight", function() {
+        SCOREAPP.page.schedule();
         history.pushState(null, null, '#schedule');
     });
 }
 };
 
-	// Data objecten
+    // Data objecten
 
-	// Pages
-	SCOREAPP.page = {
+    // Pages
+    SCOREAPP.page = {
 
-		//method
-		ranking: function () {
-			console.log("3. PAGE RENDEREN ranking");
-			spinner.startSpinning(); // start spinner
+        //method
+        ranking: function () {
+            console.log("3. PAGE RENDEREN ranking");
+            spinner.startSpinning(); // start spinner
             SCOREAPP.router.currentItem2(); //make ranking current item
 
 
-			promise.get(SCOREAPP.settings.rankingURL).then(function(error, text, xhr) {
+            promise.get(SCOREAPP.settings.rankingURL).then(function(error, text, xhr) {
                 if (error) {
                      alert('Error ' + xhr.status);
                     return;
@@ -179,18 +179,18 @@ SCOREAPP.touch = {
                 Transparency.render(qwery('[data-route=ranking')[0], SCOREAPP.ranking);
                 spinner.stop();
                 SCOREAPP.router.change("ranking");
-			});
-		},
+            });
+        },
 
-		//method
-		schedule: function () {
-			console.log("3. PAGE RENDEREN  schedule");
-			spinner.startSpinning();
+        //method
+        schedule: function () {
+            console.log("3. PAGE RENDEREN  schedule");
+            spinner.startSpinning();
             SCOREAPP.router.currentItem1();
 
 
-			promise.get('https://api.leaguevine.com/v1/games/?tournament_id=19389&access_token=16efeb5be0').then(function(error, text, xhr) {
-				// string parsen naar javascript objecten, zodat je hem kan uitlezen
+            promise.get('https://api.leaguevine.com/v1/games/?tournament_id=19389&access_token=16efeb5be0').then(function(error, text, xhr) {
+                // string parsen naar javascript objecten, zodat je hem kan uitlezen
                 var result = JSON.parse(text);
 
 
@@ -212,34 +212,34 @@ SCOREAPP.touch = {
 
                 Transparency.render(qwery('[data-route=schedule')[0], SCOREAPP.schedule, directivesGame);
                 spinner.stop();
-			});
-			SCOREAPP.router.change("schedule");
+            });
+            SCOREAPP.router.change("schedule");
 
-		},
+        },
 
-		game: function (id) {
-			console.log("3. PAGE RENDEREN game");
+        game: function (id) {
+            console.log("3. PAGE RENDEREN game");
             spinner.startSpinning();
             SCOREAPP.router.currentItem1();
 
 
-			var pakID = window.location.hash.slice(6);
-			console.log(pakID);
+            var pakID = window.location.hash.slice(6);
+            console.log(pakID);
 
-			promise.get(SCOREAPP.settings.gameURL + pakID + '/').then(function(error, text, xhr) {
-								if (error) {
+            promise.get(SCOREAPP.settings.gameURL + pakID + '/').then(function(error, text, xhr) {
+                                if (error) {
             alert('Error ' + xhr.status);
             return;
             }
             // SCOREAPP.poules zijn de objecten uit je parse
             SCOREAPP.game = JSON.parse(text);
 
-			Transparency.render(qwery('[data-route=game')[0], SCOREAPP.game);
-			console.log("SCOREAPP GAME = ", SCOREAPP.game);
+            Transparency.render(qwery('[data-route=game')[0], SCOREAPP.game);
+            console.log("SCOREAPP GAME = ", SCOREAPP.game);
             spinner.stop();
-			SCOREAPP.router.change("game");
+            SCOREAPP.router.change("game");
 
-			});
+            });
 
 
             var knopPost = document.getElementById("updateScore");
@@ -267,11 +267,10 @@ SCOREAPP.touch = {
                 xhr.send(newScore);
                 xhr.onload = function () {
                     console.log("ik stuur iets");
-
+                    SCOREAPP.page.post();
                 };
 
             };
-
 
             if (knopPost.addEventListener) {  // all browsers except IE before version 9
                 knopPost.addEventListener("click", postTeamData, false);
@@ -283,25 +282,32 @@ SCOREAPP.touch = {
               }
             }
 
-			SCOREAPP.router.change();
+        },
+        //method
 
 
-		}
-	};
+        post: function () {
+            console.log("feedback");
+            move('.feedback')
+              .set('opacity', 0.8)
+              .set('background-color', 'green')
+              .duration(1500)
+              .then()
+
+                .set('opacity', 1)
+                .set('background-color', '#465965')
+                .pop()
+              .end();
+        }
+    };
+
+    // DOM ready
+    // Gebruik om de app te initialiseren wanneer DOM = ready
+    domready(function () {
+        // Zorg ervoor dat de app gaat starten
+        SCOREAPP.controller.init();
 
 
-
-
-
-
-
-	// DOM ready
-	// Gebruik om de app te initialiseren wanneer DOM = ready
-	domready(function () {
-		// Zorg ervoor dat de app gaat starten
-		SCOREAPP.controller.init();
-
-
-	});
+    });
 
 })();

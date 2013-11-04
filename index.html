@@ -25,13 +25,15 @@
 
 	<div id="container">
 
-		<div id="pullrefresh">
-        <div class="message">
-            <div id="pullrefresh-icon" class="icon arrow arrow-down"></div>
-            <span></span>
-        </div>
-    </div>
-	<div id="spinner"><div class="overlay"></div></div>
+<!-- 		<div id="pullrefresh">
+                <div class="message">
+                    <div id="pullrefresh-icon" class="icon arrow arrow-down"></div>
+                            <span></span>
+                    </div>
+            </div> -->
+
+
+	<div id="spinner"></div>
 
 		<article id="content" class="col">
 
@@ -42,7 +44,7 @@
 						<thead>
 							<tr>
 								<th>Team</th>
-								<th>Score</th>
+								<th class="feedback">Score</th>
 								<th>Team</th>
 							</tr>
 						</thead>
@@ -118,18 +120,11 @@
 									</select>
 								</td>
 								<td data-bind="team_2"><span data-bind="name"></span></td>
-								<td><a class="btn" id="updateScore" data-bind="postID">Update</a> </td>
+								<td><a href="#/schedule" class="btn" id="updateScore" data-bind="postID">Update</a> </td>
 							</tr>
 						</tbody>
 					</table>
 				</section>
-			</section>
-
-			<section data-route="post">
-				<table>
-				<tr><td><h1 data-bind="name"> Post is succes </h1></td></tr>
-				<tr><td><a data-bind="backToGameID">Ga terug naar de schedule pagina</a></td></tr>
-				</table>
 			</section>
 
 			<section data-route="ranking">
@@ -173,6 +168,8 @@
 	<script src="static/js/lib/sorttable.js"></script>
 	<script src="static/js/lib/hammer.min.js"></script>
     <script src="static/js/lib/CSSClass.min.js"></script>
+    <script src="static/js/lib/move.min.js"></script>
+
 
 	  <!-- <script src="static/js/lib/modernizr.js"></script>
 	 // <script src="static/js/lib/ga.js"></script> -->
