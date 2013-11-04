@@ -67,7 +67,6 @@ var SCOREAPP = SCOREAPP || {};
 
         init: function () {
             console.log("2. ROUTER"),
-
             routie({
 
             '/ranking': function(){
@@ -85,7 +84,7 @@ var SCOREAPP = SCOREAPP || {};
             },
 
             '*': function() {
-                //home page of iets dergelijks
+                //home page
 
             }
         });
@@ -138,9 +137,10 @@ var SCOREAPP = SCOREAPP || {};
         }
     };
 
-
+//object
 SCOREAPP.touch = {
 
+    //method
     init: function () {
     var swipeleft = Hammer(container).on("swipeleft", function() {
         SCOREAPP.page.ranking();
@@ -173,7 +173,6 @@ SCOREAPP.touch = {
                 }
 
                 // Omdat je een string krijgt moet je hem Parsen naar Javascript objecten om uit te kunnen lezen
-
                 var result = JSON.parse(text);
                 console.log(result);
 
@@ -191,11 +190,10 @@ SCOREAPP.touch = {
             spinner.startSpinning();
             SCOREAPP.router.currentItem1();
 
-
+            // XMLHttpRequest get
             promise.get(SCOREAPP.settings.scheduleURL).then(function(error, text, xhr) {
                 // string parsen naar javascript objecten, zodat je hem kan uitlezen
                 var result = JSON.parse(text);
-
 
                 // als op Score wordt gedrukt ga dan naar #/game/game id
                 var directivesGame = {
@@ -286,8 +284,6 @@ SCOREAPP.touch = {
             }
 
         },
-        //method
-
 
         post: function () {
             console.log("feedback");
