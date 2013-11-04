@@ -6,6 +6,8 @@ var SCOREAPP = SCOREAPP || {};
 (function () {
     // Local scope == function scope == lexical scope
     // Zorgt ervoor dat je script in EMASCRIPT 5 draait
+    //generally providing the user with more information and a tapered-down coding experience
+    // kan gebruik maken van JSON.parse
     "use strict";
 
     // options for spinner
