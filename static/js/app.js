@@ -255,7 +255,8 @@ SCOREAPP.touch = {
                 var newScore = JSON.stringify({
                     'game_id': SCOREAPP.game.id + "",
                     'team_1_score': SCOREAPP.game.team_1_score,
-                    'team_2_score': SCOREAPP.game.team_2_score
+                    'team_2_score': SCOREAPP.game.team_2_score,
+                    'is_final': true
                 });
 
                 var xhr = new XMLHttpRequest();
