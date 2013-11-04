@@ -45,7 +45,8 @@ var SCOREAPP = SCOREAPP || {};
     SCOREAPP.settings = {
     //  scheduleURL:
         gameURL: 'https://api.leaguevine.com/v1/games',
-        rankingURL: 'https://api.leaguevine.com/v1/pools/?tournament_id=19389&order_by=%5Bname%5D'
+        rankingURL: 'https://api.leaguevine.com/v1/pools/?tournament_id=19389&order_by=%5Bname%5D',
+        scheduleURL: 'https://api.leaguevine.com/v1/games/?tournament_id=19389&access_token=16efeb5be0'
     },
 
     // Controller Init
@@ -191,7 +192,7 @@ SCOREAPP.touch = {
             SCOREAPP.router.currentItem1();
 
 
-            promise.get('https://api.leaguevine.com/v1/games/?tournament_id=19389&access_token=16efeb5be0').then(function(error, text, xhr) {
+            promise.get(SCOREAPP.settings.scheduleURL).then(function(error, text, xhr) {
                 // string parsen naar javascript objecten, zodat je hem kan uitlezen
                 var result = JSON.parse(text);
 
