@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Amsterdam Ultimate Autumn</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link href='http://fonts.googleapis.com/css?family=Share+Tech|Droid+Sans|Ubuntu|Open+Sans:400,700,800|Raleway:400,500,800|Changa+One' rel='stylesheet' type='text/css'>
+    <link href="static/css/icomoon.css" rel="stylesheet" type="text/css" />
+	<link href="static/css/style.css" rel="stylesheet" type="text/css" />
+
+	<!-- <link href="static/css/touch.css" rel="stylesheet" type="text/css" /> -->
+</head>
+<body>
+	<header>
+
+		<a href="#/schedule"><h1>Amsterdam Ultimate Autumn<span class="logo"><img width="80px" src="static/images/logo_frisbee1.png"></span></h1></a>
+		<nav>
+			<ul >
+				<li id="item1" ><a href="#/schedule">Schedule</a></li>
+				<li id="item2" ><a href="#/ranking">Ranking</a></li>
+			</ul>
+		</nav>
+	</header>
+
+
+	<div id="container">
+
+		<div id="pullrefresh">
+        <div class="message">
+            <div id="pullrefresh-icon" class="icon arrow arrow-down"></div>
+            <span></span>
+        </div>
+    </div>
+	<div id="spinner"><div class="overlay"></div></div>
+
+		<article id="content" class="col">
+
+			<section data-route="schedule">
+				<h1>Games</h1>
+				<section >
+					<table class="sortable">
+						<thead>
+							<tr>
+								<th>Team</th>
+								<th>Score</th>
+								<th>Team</th>
+							</tr>
+						</thead>
+						<tbody  data-bind="objects">
+							<tr>
+								<td data-bind="team_1" class="text-left"><span data-bind="name"></span></td>
+								<td><span data-bind="team_1_score"></span> - <span data-bind="team_2_score"></span></td>
+								<td data-bind="team_2" class="text-left"><span data-bind="name"></span></td>
+								<td><a class="btn" data-bind="thisID"><span class="icon-pencil"></span> Score </a></td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+			</section>
+
+			<section data-route="game">
+				<section>
+                    <nav class="back"><a href="#/schedule"><span class="icon-arrow-left"></span></a>
+                    </nav>
+					<table>
+						<thead>
+							<tr>
+								<th>Team 1</th>
+								<th>New score team 1</th>
+								<th>Old scores</th>
+								<th>New score team 2</th>
+								<th>Team 2</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td data-bind="team_1" class="text-left"><span data-bind="name"></span></td>
+								<td>
+									<select id="team1score">
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+									</select>
+								</td>
+								<td><span data-bind="team_1_score"></span> - <span data-bind="team_2_score"></span></td>
+								<td>
+									<select id="team2score">
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+									</select>
+								</td>
+								<td data-bind="team_2"><span data-bind="name"></span></td>
+								<td><a class="btn" id="updateScore" data-bind="postID">Update</a> </td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+			</section>
+
+			<section data-route="post">
+				<table>
+				<tr><td><h1 data-bind="name"> Post is succes </h1></td></tr>
+				<tr><td><a data-bind="backToGameID">Ga terug naar de schedule pagina</a></td></tr>
+				</table>
+			</section>
+
+			<section data-route="ranking">
+				<section data-bind="objects">
+					<h1><a class="poolid" data-bind="poolidurl">Pool <span data-bind="name"></span></a></h1>
+					<table class="sortable">
+						<thead class="sortable">
+							<tr>
+								<th>Team</th>
+								<th>W</th>
+								<th>L</th>
+								<th>Points allowed</th>
+								<th>Points scored</th>
+								<th>+ / -</th>
+							</tr>
+						</thead>
+						<tbody data-bind="standings">
+							<tr>
+								<td data-bind="team" class="text-left"><span data-bind="name"></span></td>
+								<td data-bind="wins"></td>
+								<td data-bind="losses"></td>
+								<td data-bind="points_allowed"></td>
+								<td data-bind="points_scored"></td>
+								<td data-bind="plus_minus"></td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+			</section>
+
+		</article>
+	</div>
+
+	<!-- Libs -->
+	<script src="static/js/lib/routie.min.js"></script>
+	<script src="static/js/lib/ready.min.js" ></script>
+	<script src="static/js/lib/qwery.min.js"></script>
+	<script src="static/js/lib/transparancy.min.js"></script>
+	<script src="static/js/lib/promise.min.js" ></script>
+	<script src="static/js/lib/spin.min.js" ></script>
+	<script src="static/js/lib/sorttable.js"></script>
+	<script src="static/js/lib/hammer.min.js"></script>
+    <script src="static/js/lib/CSSClass.min.js"></script>
+
+	  <!-- <script src="static/js/lib/modernizr.js"></script>
+	 // <script src="static/js/lib/ga.js"></script> -->
+
+	<!-- Application -->
+	 <!-- <script src="static/js/touch.js"></script> -->
+	<script src="static/js/app.js"></script>
+
+</body>
+</html>

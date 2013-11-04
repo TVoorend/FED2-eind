@@ -1,0 +1,64 @@
+                                        README, Break down
+
+
+Name space :SCOREAPP
+
+Self-invoking anonymous function
+    - Spinner
+
+SCOREAPP.settings
+
+SCOREAPP.controller
+    - init
+
+SCOREAPP.router
+    - init
+    - change
+    - currentItem
+
+SCOREAPP.touch
+    - init (for swipe)
+
+
+SCOREAPP.page
+    - ranking
+        - start spinner
+        - make list item ranking current
+        - get
+        - parse
+        - connect content tot data-route=ranking
+        - stop spinner
+        - send to change to active section
+
+    - schedule
+        - start spinner
+        - make list item schedule current
+        - get
+        - parse
+        - creat a link to go to game (so you can go to link with game id)
+        - connect content tot data-route=schedule
+        - stop spinner
+        - send to change to active section
+
+    - game
+        - start spinner
+        - make list item schedule current item
+        - console.log shows game-id (pakID)
+        - get
+        - parse
+        - connect content tot data-route=game
+        - stop spinner
+
+
+        - PostTeamData
+            - console show when update the old and new scores
+            - get value form select/option
+            - make a string to send
+            - make a XMLHttpRequest()
+            - when send show a message in console log
+        - when 'update' button click send
+        - send to change to active section
+
+Dom ready
+    - start SCOREAPP.contoller.init
+
