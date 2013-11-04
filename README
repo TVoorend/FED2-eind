@@ -58,6 +58,9 @@ SCOREAPP.page
             - when send show a message in console log
         - when 'update' button click send
         - send to change to active section
+        
+    - post 
+        - give feedback (score highlight)
 
 Dom ready
     - start SCOREAPP.contoller.init
