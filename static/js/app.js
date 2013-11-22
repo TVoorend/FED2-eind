@@ -10,44 +10,16 @@ var SCOREAPP = SCOREAPP || {};
     // kan gebruik maken van JSON.parse
     "use strict";
 
-    // options for spinner
-    var options = {
-        lines: 13, // The number of lines to draw
-        length: 15, // The length of each line
-        width: 10, // The line thickness
-        radius: 25, // The radius of the inner circle
-        corners: 1, // Corner roundness (0..1)
-        rotate: 0, // The rotation offset
-        direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#2A3A48', // #rgb or #rrggbb or array of colors
-        speed: 1, // Rounds per second
-        trail: 60, // Afterglow percentage
-        shadow: false, // Whether to render a shadow
-        hwaccel: false, // Whether to use hardware acceleration
-        className: 'spinner', // The CSS class to assign to the spinner
-        zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: '200px', // Top position relative to parent in px
-        left: 'auto' // Left position relative to parent in px
-    };
-
-    //creat spinner with option above)
-    var spinner = new Spinner(options);
-
-    // ease way to select spinner form the dom
-    var target = document.getElementById('spinner');
-
-    // creat start spinning function
-    spinner.startSpinning = function () {
-        spinner.spin(target);
-    },
+    var teamOne = {};
+    var teamTwo = {};
 
     // SETTINGS
     SCOREAPP.settings = {
     //  scheduleURL:
         gameURL: 'https://api.leaguevine.com/v1/games',
         rankingURL: 'https://api.leaguevine.com/v1/pools/?tournament_id=19389&order_by=%5Bname%5D',
-        scheduleURL: 'https://api.leaguevine.com/v1/games/?tournament_id=19389&access_token=16efeb5be0'
-    },
+        scheduleURL: 'https://api.leaguevine.com/v1/games/?tournament_id=19389&access_token=ff1b26d0e7'
+    };
 
     // Controller Init
     SCOREAPP.controller = {
@@ -59,7 +31,7 @@ var SCOREAPP = SCOREAPP || {};
             SCOREAPP.router.init();
             SCOREAPP.touch.init();
         }
-    },
+    };
 
     // Router
     // Routie plugin helpt bij het navigeren tussen verschillende "pagina's" op één pagina
@@ -85,9 +57,8 @@ var SCOREAPP = SCOREAPP || {};
 
             '*': function() {
                 //home page
-
             }
-        });
+        })
     },
 
         // Zorg ervoor dat de pagina's wisselen.
@@ -134,20 +105,29 @@ var SCOREAPP = SCOREAPP || {};
         document.getElementById('item2').addClass('current');
         console.log("current is ranking");
 
+    }
+};
+    SCOREAPP.loader = {
+        spinner: function () {
+
+        document.getElementById('spinner').toggleClass('on');
+        console.log("toggle");
+
         }
     };
+
 
 //object
 SCOREAPP.touch = {
 
     //method
     init: function () {
-    var swipeleft = Hammer(container).on("swipeleft", function() {
+    var swipeleft = new Hammer(container).on("swipeleft", function() {
         SCOREAPP.page.ranking();
         history.pushState(null, null, '#ranking');
     });
 
-    var swiperight = Hammer(container).on("swiperight", function() {
+    var swiperight = new Hammer(container).on("swiperight", function() {
         SCOREAPP.page.schedule();
         history.pushState(null, null, '#schedule');
     });
@@ -162,7 +142,7 @@ SCOREAPP.touch = {
         //method
         ranking: function () {
             console.log("3. PAGE RENDEREN ranking");
-            spinner.startSpinning(); // start spinner
+            SCOREAPP.loader.spinner(); // start spinner
             SCOREAPP.router.currentItem2(); //make ranking current item
 
 
@@ -179,7 +159,7 @@ SCOREAPP.touch = {
                 // SCOREAPP.poules zijn de objecten uit je parse
                 SCOREAPP.ranking = JSON.parse(text);
                 Transparency.render(qwery('[data-route=ranking')[0], SCOREAPP.ranking);
-                spinner.stop();
+                SCOREAPP.loader.spinner();
                 SCOREAPP.router.change("ranking");
             });
         },
@@ -187,7 +167,7 @@ SCOREAPP.touch = {
         //method
         schedule: function () {
             console.log("3. PAGE RENDEREN  schedule");
-            spinner.startSpinning();
+            SCOREAPP.loader.spinner();
             SCOREAPP.router.currentItem1();
 
             // XMLHttpRequest get
@@ -201,6 +181,10 @@ SCOREAPP.touch = {
                         thisID: {
                             href: function(params) {
                                 return "#/game/" + this.id;
+                            },
+                            id: function(params) {
+                                return this.id;
+
                             }
                         }
                     }
@@ -210,9 +194,9 @@ SCOREAPP.touch = {
 
                 SCOREAPP.schedule = result;
                 console.log('SCOREAPP.schedule +' , SCOREAPP.schedule);
-
+                SCOREAPP.loader.spinner();
                 Transparency.render(qwery('[data-route=schedule')[0], SCOREAPP.schedule, directivesGame);
-                spinner.stop();
+
             });
             SCOREAPP.router.change("schedule");
 
@@ -220,12 +204,14 @@ SCOREAPP.touch = {
 
         game: function (id) {
             console.log("3. PAGE RENDEREN game");
-            spinner.startSpinning();
+            SCOREAPP.loader.spinner();
             SCOREAPP.router.currentItem1();
 
 
             var pakID = window.location.hash.slice(6);
             console.log(pakID);
+            teamOne = pakID.substring(1);
+            console.log("teamOne", teamOne);
 
             promise.get(SCOREAPP.settings.gameURL + pakID + '/').then(function(error, text, xhr) {
                                 if (error) {
@@ -237,7 +223,7 @@ SCOREAPP.touch = {
 
             Transparency.render(qwery('[data-route=game')[0], SCOREAPP.game);
             console.log("SCOREAPP GAME = ", SCOREAPP.game);
-            spinner.stop();
+            SCOREAPP.loader.spinner();
             SCOREAPP.router.change("game");
 
             });
@@ -261,10 +247,10 @@ SCOREAPP.touch = {
 
                 var xhr = new XMLHttpRequest();
 
-                xhr.open("POST", "https://api.leaguevine.com/v1/game_scores/?access_token=82996312dc", true);
+                xhr.open("POST", "https://api.leaguevine.com/v1/game_scores/?access_token=ff1b26d0e7", true);
 
                 xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-                xhr.setRequestHeader("Authorization", "bearer  e236f54a35");
+                xhr.setRequestHeader("Authorization", "bearer  a79995c944");
                 xhr.setRequestHeader("Accept", "application/json, text/plain, */*");
                 xhr.send(newScore);
                 xhr.onload = function () {
@@ -287,19 +273,32 @@ SCOREAPP.touch = {
         },
 
         post: function () {
-            console.log("feedback");
-            move('.feedback')
-              .set('opacity', 0.8)
-              .set('background-color', 'green')
-              .duration(1500)
-              .then()
+            console.log(teamOne);
+            document.getElementById(teamOne).parentElement.parentElement.addClass("feedback");
+            SCOREAPP.feedback.change();
 
-                .set('opacity', 1)
-                .set('background-color', '#465965')
-                .pop()
-              .end();
         }
     };
+    SCOREAPP.feedback = {
+        change: function() {
+        move('.feedback')
+          .set('opacity', 0.8)
+          .set('background', 'green')
+          .duration(1500)
+          .then()
+            .set('opacity', 1)
+            .set('background', '#BAD8DF')
+            .pop()
+            .then()
+            .set('opacity', 1)
+            .set('background', '#BAD8DF')
+            .pop()
+          .end();
+          SCOREAPP.page.schedule();
+          }
+          };
+
+
 
     // DOM ready
     // Gebruik om de app te initialiseren wanneer DOM = ready
@@ -310,4 +309,4 @@ SCOREAPP.touch = {
 
     });
 
-})();
+    })();
