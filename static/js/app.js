@@ -158,7 +158,6 @@ var SCOREAPP = SCOREAPP || {};
                 Transparency.render(qwery('[data-route=ranking')[0], SCOREAPP.ranking);
                 SCOREAPP.loader.spinner();
                 SCOREAPP.router.change("ranking");
-                SCOREAPP.feedback.removeFeedbackAll();
             });
         },
 
