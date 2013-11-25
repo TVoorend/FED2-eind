@@ -10,8 +10,7 @@ var SCOREAPP = SCOREAPP || {};
     // kan gebruik maken van JSON.parse
     "use strict";
 
-    var teamOne = {};
-    var teamTwo = {};
+    var updatedGame = {};
 
     // SETTINGS
     SCOREAPP.settings = {
@@ -92,48 +91,46 @@ var SCOREAPP = SCOREAPP || {};
 
         currentItem1: function () {
 
-        document.getElementById('item2').removeClass('current');
-        document.getElementById('item1').addClass('current');
-        console.log("current is schedule");
+            document.getElementById('item2').removeClass('current');
+            document.getElementById('item1').addClass('current');
+            console.log("current is schedule");
 
         },
 
         currentItem2: function () {
 
-
-        document.getElementById('item1').removeClass('current');
-        document.getElementById('item2').addClass('current');
-        console.log("current is ranking");
-
-    }
-};
-    SCOREAPP.loader = {
-        spinner: function () {
-
-        document.getElementById('spinner').toggleClass('on');
-        console.log("toggle");
+            document.getElementById('item1').removeClass('current');
+            document.getElementById('item2').addClass('current');
+            console.log("current is ranking");
 
         }
     };
 
+    SCOREAPP.loader = {
+        spinner: function () {
 
-//object
-SCOREAPP.touch = {
+            document.getElementById('spinner').toggleClass('on');
+            console.log("toggle");
 
-    //method
-    init: function () {
-    var swipeleft = new Hammer(container).on("swipeleft", function() {
-        SCOREAPP.page.ranking();
-        history.pushState(null, null, '#ranking');
-    });
+        }
+    };
 
-    var swiperight = new Hammer(container).on("swiperight", function() {
-        SCOREAPP.page.schedule();
-        history.pushState(null, null, '#schedule');
-    });
-}
-};
+    //object
+    SCOREAPP.touch = {
 
+        //method
+        init: function () {
+            var swipeleft = new Hammer(container).on("swipeleft", function() {
+                SCOREAPP.page.ranking();
+                history.pushState(null, null, '#ranking');
+            });
+
+            var swiperight = new Hammer(container).on("swiperight", function() {
+                SCOREAPP.page.schedule();
+                history.pushState(null, null, '#schedule');
+            });
+        }
+    };
     // Data objecten
 
     // Pages
@@ -161,6 +158,7 @@ SCOREAPP.touch = {
                 Transparency.render(qwery('[data-route=ranking')[0], SCOREAPP.ranking);
                 SCOREAPP.loader.spinner();
                 SCOREAPP.router.change("ranking");
+                SCOREAPP.feedback.removeFeedbackAll();
             });
         },
 
@@ -182,7 +180,7 @@ SCOREAPP.touch = {
                             href: function(params) {
                                 return "#/game/" + this.id;
                             },
-                            id: function(params) {
+                            id: function(params) { // geef id aan alle verschillende games
                                 return this.id;
 
                             }
@@ -207,11 +205,11 @@ SCOREAPP.touch = {
             SCOREAPP.loader.spinner();
             SCOREAPP.router.currentItem1();
 
-
+            // geef updategame een waarden
             var pakID = window.location.hash.slice(6);
             console.log(pakID);
-            teamOne = pakID.substring(1);
-            console.log("teamOne", teamOne);
+            updatedGame = pakID.substring(1);
+            console.log("updatedGame", updatedGame);
 
             promise.get(SCOREAPP.settings.gameURL + pakID + '/').then(function(error, text, xhr) {
                                 if (error) {
@@ -224,6 +222,7 @@ SCOREAPP.touch = {
             Transparency.render(qwery('[data-route=game')[0], SCOREAPP.game);
             console.log("SCOREAPP GAME = ", SCOREAPP.game);
             SCOREAPP.loader.spinner();
+            SCOREAPP.feedback.removeFeedbackAll(); // haal oude feedback weg
             SCOREAPP.router.change("game");
 
             });
@@ -252,14 +251,19 @@ SCOREAPP.touch = {
                 xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
                 xhr.setRequestHeader("Authorization", "bearer  a79995c944");
                 xhr.setRequestHeader("Accept", "application/json, text/plain, */*");
+
                 xhr.send(newScore);
+
                 xhr.onload = function () {
+                    if (xhr.readyState==4 && xhr.status == 201 ) {
                     console.log("ik stuur iets");
-                    SCOREAPP.page.post();
+                    SCOREAPP.feedback.giveClassFeedback();
+                    }
                 };
 
             };
 
+            // trigger van de post
             if (knopPost.addEventListener) {  // all browsers except IE before version 9
                 knopPost.addEventListener("click", postTeamData, false);
                 }
@@ -269,35 +273,43 @@ SCOREAPP.touch = {
                 knopPost.attachEvent("click", postTeamData);
               }
             }
-
-        },
-
-        post: function () {
-            console.log(teamOne);
-            document.getElementById(teamOne).parentElement.parentElement.addClass("feedback");
-            SCOREAPP.feedback.change();
-
         }
     };
-    SCOREAPP.feedback = {
-        change: function() {
-        move('.feedback')
-          .set('opacity', 0.8)
-          .set('background', 'green')
-          .duration(1500)
-          .then()
-            .set('opacity', 1)
-            .set('background', '#BAD8DF')
-            .pop()
-            .then()
-            .set('opacity', 1)
-            .set('background', '#BAD8DF')
-            .pop()
-          .end();
-          SCOREAPP.page.schedule();
-          }
-          };
 
+    SCOREAPP.feedback = {
+        giveClassFeedback: function () {
+            console.log(updatedGame);
+            document.getElementById(updatedGame).parentElement.parentElement.addClass("feedback");
+            SCOREAPP.feedback.setFeedback();
+        },
+
+        setFeedback: function() {
+        move('.feedback')
+            .set('opacity', 1)
+            .set('background', '#0CE833')
+            .end();
+            SCOREAPP.page.schedule();
+            history.pushState(null, null, '#schedule');
+            },
+
+        // removeFeedback: function() {
+
+        //     // qwery("feedback").removeAttribute("style");
+        //     console.log("feedbackremove");
+
+        //     document.getElementById(updatedGame).parentElement.parentElement.removeClass("feedback");
+        //     document.getElementById(updatedGame).parentElement.parentElement.removeAttribute("style");
+
+        //    },
+
+        removeFeedbackAll: function() {
+
+            console.log("feedbackremoveall");
+
+            $(".feedback").removeAttr( "style" ).removeClass("feedback");
+
+            }
+        };
 
 
     // DOM ready
